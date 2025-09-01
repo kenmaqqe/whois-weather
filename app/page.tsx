@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
+
 const Home = () => {
-  return <>hi</>;
+  redirect("/users");
 };
 
 export default Home;
