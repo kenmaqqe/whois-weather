@@ -29,14 +29,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="flex justify-between items-center p-5">
+        <header className="flex justify-between items-center p-5 bg-gray-800 text-white">
           <Link href="/">
-            <h1>WhoIsWeather</h1>
+            <h1 className="text-xl font-bold">WhoIsWeather</h1>
           </Link>
           <Link href="/saved">
             <Image
               src="https://www.svgrepo.com/show/315933/heart-red.svg"
-              alt=""
+              alt="saved"
               width={30}
               height={30}
             />

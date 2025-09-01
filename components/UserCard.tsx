@@ -100,7 +100,7 @@ const UserCard = ({
           </button>
         )}
         <Link
-          href={`/weather?latitude=${location.coordinates.latitude}&longitude=${location.coordinates.longitude}`}
+          href={`/weather?lat=${location.coordinates.latitude}&lon=${location.coordinates.longitude}`}
         >
           <button
             type="button"
