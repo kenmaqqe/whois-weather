@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import Image from "next/image";
+import { FaBookmark } from "react-icons/fa";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,12 +34,7 @@ export default function RootLayout({
             <h1 className="text-xl font-bold">WhoIsWeather</h1>
           </Link>
           <Link href="/saved">
-            <Image
-              src="https://www.svgrepo.com/show/315933/heart-red.svg"
-              alt="saved"
-              width={30}
-              height={30}
-            />
+            <FaBookmark size={25} />
           </Link>
         </header>
         {children}

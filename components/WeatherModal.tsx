@@ -1,8 +1,8 @@
 "use client";
-import { useSearchParams } from "next/navigation";
 import fetchWeather from "@/utills/fetchWeather";
 import { useState, useEffect } from "react";
-import WeatherIcon from "@/components/WeatherIcons";
+import WeatherIcon from "./WeatherIcons";
+import { IoIosClose } from "react-icons/io";
 
 type WeatherType = {
   current_weather: {
@@ -12,25 +12,44 @@ type WeatherType = {
   };
 };
 
-const WeatherPage: React.FC = () => {
+type Props = {
+  isModalOpen: boolean;
+  lat: string;
+  lon: string;
+  onClose: () => void;
+};
+
+const WeatherModal: React.FC<Props> = ({ isModalOpen, lat, lon, onClose }) => {
   const [weather, setWeather] = useState<WeatherType | null>(null);
-  const searchParams = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lon = searchParams.get("lon");
 
   useEffect(() => {
-    if (lat && lon) {
+    if (isModalOpen && lat && lon) {
       const getWeather = async () => {
         const data = await fetchWeather(lat, lon);
         setWeather(data);
       };
       getWeather();
     }
-  }, [lat, lon]);
+  }, [isModalOpen, lat, lon]);
+
+  if (!isModalOpen) return null;
 
   return (
-    <div className="h-dvh bg-gray-900 flex items-center justify-center">
-      <div className="bg-gray-800 text-white shadow-xl rounded-2xl p-6 sm:p-10 max-w-sm w-full text-center overflow-auto max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div
+        aria-label="Close modal backdrop"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="relative bg-gray-800 text-white shadow-2xl rounded-2xl p-6 sm:p-10 max-w-sm w-full text-center animate-fadeIn z-10">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-400 hover:text-white transition cursor-pointer"
+        >
+          <IoIosClose size={30} />
+        </button>
+
         <h1 className="text-2xl sm:text-3xl font-bold mb-6">Weather</h1>
         {weather ? (
           <>
@@ -64,4 +83,4 @@ const WeatherPage: React.FC = () => {
   );
 };
 
-export default WeatherPage;
+export default WeatherModal;

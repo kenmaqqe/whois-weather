@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import type { UserType } from "@/components/UserCard";
 import UserCard from "@/components/UserCard";
-import Image from "next/image";
+import { FaDeleteLeft } from "react-icons/fa6";
 
 const SavedPage = () => {
   const [savedUsers, setSavedUsers] = useState<UserType[]>([]);
@@ -70,12 +70,7 @@ const SavedPage = () => {
   "
         onClick={handleClearAll}
       >
-        <Image
-          src="https://www.svgrepo.com/show/369884/clear-inverse-reflect-horizontal.svg"
-          alt="clear-image"
-          width={30}
-          height={30}
-        />
+        <FaDeleteLeft />
         Clear all
       </button>
     </div>
