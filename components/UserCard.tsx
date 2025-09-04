@@ -45,13 +45,15 @@ const UserCard = ({
   console.log(picture);
   return (
     <div className="max-w-sm w-full bg-white dark:bg-gray-800 shadow-md rounded-lg p-5 m-3 flex flex-col items-center transition hover:shadow-xl">
-      <img
-        src={picture.toString()}
+      <Image
+        src={picture}
         alt={name.first}
         width={120}
         height={120}
         className="rounded-full border-2 border-indigo-500 mb-4"
+        unoptimized
       />
+
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1 text-center">
         {name.title} {name.first} {name.last}
       </h2>
