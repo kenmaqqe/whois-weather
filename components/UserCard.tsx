@@ -10,12 +10,6 @@ type UserName = {
   last: string;
 };
 
-type Pictures = {
-  large: string;
-  medium: string;
-  thumbnail: string;
-};
-
 type Coordinates = {
   coordinates: {
     latitude: string;
@@ -26,7 +20,7 @@ type Coordinates = {
 export interface UserType {
   name: UserName;
   gender: string;
-  picture: Pictures;
+  picture: string;
   location: Coordinates;
   email?: string;
   saveUser?: () => void;
@@ -50,7 +44,7 @@ const UserCard = ({
   return (
     <div className="max-w-sm w-full bg-white dark:bg-gray-800 shadow-md rounded-lg p-5 m-3 flex flex-col items-center transition hover:shadow-xl">
       <Image
-        src={picture.large}
+        src={picture}
         alt={name.first}
         width={120}
         height={120}
