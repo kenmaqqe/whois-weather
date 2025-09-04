@@ -2,9 +2,23 @@
 import UserCard, { UserType } from "@/components/UserCard";
 import { FaDeleteLeft } from "react-icons/fa6";
 import useSavedUsers from "@/hooks/useSavedUsers";
+import { useState } from "react";
+import WeatherModal from "@/components/WeatherModal";
 
 const SavedPage = () => {
   const { savedUsers, handleDelete, handleClearAll } = useSavedUsers();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState({ lat: "", lon: "" });
+
+  const checkWeather = (lat: string, lon: string) => {
+    setIsModalOpen(true);
+    setUserLocation({ lat, lon });
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setUserLocation({ lat: "", lon: "" });
+  };
 
   return (
     <div className="min-h-screen bg-black text-white p-5">
@@ -24,8 +38,20 @@ const SavedPage = () => {
                 location={user.location}
                 email={user.email}
                 deleteUser={() => handleDelete(user.email as string)}
+                checkWeather={() =>
+                  checkWeather(
+                    user.location.coordinates.latitude,
+                    user.location.coordinates.longitude
+                  )
+                }
               />
             ))}
+            <WeatherModal
+              isModalOpen={isModalOpen}
+              onClose={closeModal}
+              lat={userLocation.lat}
+              lon={userLocation.lon}
+            />
           </div>
 
           <button
