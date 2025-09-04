@@ -1,15 +1,7 @@
 import axios from "axios";
 
-const fetchWeather = async (lat: string, lon: string) => {
-  try {
-    const response = await axios.get(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m`
-    );
-    if (!response) throw new Error("Failed to fetch weather");
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export default fetchWeather;
+export default async function fetchWeather(lat: string, lon: string) {
+  const res = await axios.get(`/api/weather?lat=${lat}&lon=${lon}`);
+  if (!res) throw new Error("Failed to fetch weather");
+  return res.data;
+}

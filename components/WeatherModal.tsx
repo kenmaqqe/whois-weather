@@ -1,16 +1,7 @@
 "use client";
-import fetchWeather from "@/utills/fetchWeather";
-import { useState, useEffect } from "react";
-import WeatherIcon from "./WeatherIcons";
 import { IoIosClose } from "react-icons/io";
-
-type WeatherType = {
-  current_weather: {
-    temperature: number;
-    windspeed: number;
-    weathercode: number;
-  };
-};
+import WeatherIcon from "./WeatherIcons";
+import useWeather, { WeatherType } from "@/hooks/useWeather";
 
 type Props = {
   isModalOpen: boolean;
@@ -20,17 +11,7 @@ type Props = {
 };
 
 const WeatherModal: React.FC<Props> = ({ isModalOpen, lat, lon, onClose }) => {
-  const [weather, setWeather] = useState<WeatherType | null>(null);
-
-  useEffect(() => {
-    if (isModalOpen && lat && lon) {
-      const getWeather = async () => {
-        const data = await fetchWeather(lat, lon);
-        setWeather(data);
-      };
-      getWeather();
-    }
-  }, [isModalOpen, lat, lon]);
+  const { weather, loading } = useWeather(lat, lon, isModalOpen);
 
   if (!isModalOpen) return null;
 
@@ -51,7 +32,9 @@ const WeatherModal: React.FC<Props> = ({ isModalOpen, lat, lon, onClose }) => {
         </button>
 
         <h1 className="text-2xl sm:text-3xl font-bold mb-6">Weather</h1>
-        {weather ? (
+        {loading ? (
+          <p className="text-gray-400 animate-pulse">Loading...</p>
+        ) : weather ? (
           <>
             <div className="mb-6 flex justify-center">
               {WeatherIcon(weather.current_weather.weathercode)}
@@ -76,7 +59,7 @@ const WeatherModal: React.FC<Props> = ({ isModalOpen, lat, lon, onClose }) => {
             </p>
           </>
         ) : (
-          <p className="text-gray-400 animate-pulse">Loading...</p>
+          <p className="text-red-400">Failed to load weather</p>
         )}
       </div>
     </div>

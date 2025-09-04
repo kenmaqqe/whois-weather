@@ -1,97 +1,24 @@
 "use client";
-import fetchUsers from "@/utills/fetchUser";
-import { useEffect, useState } from "react";
-import type { UserType } from "@/components/UserCard";
 import UserCard from "@/components/UserCard";
 import WeatherModal from "@/components/WeatherModal";
 import { MdPersonAdd } from "react-icons/md";
+import useUsers from "@/hooks/useUsers";
+import { useState } from "react";
 
 const UsersPage = () => {
-  const [users, setUsers] = useState<UserType[]>([]);
+  const { users, handleSave, loadMoreUsers, loadUserButtonIsEnable } =
+    useUsers();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userLocation, setUserLocation] = useState<{
-    lat: string;
-    lon: string;
-  }>({ lat: "", lon: "" });
-  const [loadUserButtonIsEnable, setLoadUserButtonIsEnable] = useState(true);
-
-  useEffect(() => {
-    const savedUsers = localStorage.getItem("savedUsers");
-    const savedArray: UserType[] = savedUsers ? JSON.parse(savedUsers) : [];
-
-    async function loadUsers() {
-      try {
-        const localUsers = localStorage.getItem("users");
-        let usersList: UserType[] = localUsers ? JSON.parse(localUsers) : [];
-
-        if (usersList.length === 0) {
-          usersList = await fetchUsers();
-        }
-
-        const usersWithSaved = usersList.map((u) =>
-          savedArray.some((s) => s.email === u.email)
-            ? { ...u, saved: true }
-            : u
-        );
-
-        setUsers(usersWithSaved);
-
-        if (usersWithSaved.length >= 36) {
-          setLoadUserButtonIsEnable(false);
-        }
-
-        localStorage.setItem("users", JSON.stringify(usersWithSaved));
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    loadUsers();
-  }, []);
-
-  const handleSave = (user: UserType) => {
-    const savedUsers = localStorage.getItem("savedUsers");
-    const usersArray: UserType[] = savedUsers ? JSON.parse(savedUsers) : [];
-
-    const exists = usersArray.some((u) => u.email === user.email);
-    if (!exists) {
-      usersArray.push(user);
-      localStorage.setItem("savedUsers", JSON.stringify(usersArray));
-    }
-
-    const updatedUsers = users.map((u) => {
-      if (u.email === user.email) {
-        return { ...u, saved: true };
-      }
-      return u;
-    });
-    setUsers(updatedUsers);
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-  };
+  const [userLocation, setUserLocation] = useState({ lat: "", lon: "" });
 
   const checkWeather = (lat: string, lon: string) => {
     setIsModalOpen(true);
-    setUserLocation({ lat: lat, lon: lon });
+    setUserLocation({ lat, lon });
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setUserLocation({ lat: "", lon: "" });
-  };
-
-  const loadMoreUsers = async () => {
-    if (!loadUserButtonIsEnable) return;
-    try {
-      const usersList = await fetchUsers();
-      setUsers((prevUsers) => {
-        const updated = [...prevUsers, ...usersList];
-        localStorage.setItem("users", JSON.stringify(updated));
-        if (updated.length >= 36) setLoadUserButtonIsEnable(false);
-        return updated;
-      });
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
@@ -122,6 +49,7 @@ const UsersPage = () => {
           lon={userLocation.lon}
         />
       </div>
+
       <button
         type="button"
         onClick={loadMoreUsers}
