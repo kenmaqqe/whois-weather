@@ -46,7 +46,7 @@ const UserCard = ({
   return (
     <div className="max-w-sm w-full bg-white dark:bg-gray-800 shadow-md rounded-lg p-5 m-3 flex flex-col items-center transition hover:shadow-xl">
       <Image
-        src={picture}
+        src={picture.toString()}
         alt={name.first}
         width={120}
         height={120}
